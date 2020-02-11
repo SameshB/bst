@@ -1,87 +1,98 @@
+#include<iostream>
 #include "arrayBST.h"
-#include <iostream>
 
-ArrayBST::ArrayBST()
-{
-	for(int i=0;i<MAX_SIZE;i++){
-		this->element[i]=0;
-	}
+BinaryTree::BinaryTree(){
+    std::cout<<"Tree inited\n";
 }
 
-int ArrayBST::get_left_child(int index) const
-{
-    if(element[index]!=0 && (2*index)<=MAX_SIZE){
-        return 2*index;
+void BinaryTree::add(int data){
+    int indexToAdd = 1;
+    Node* node = new Node();
+    node->data = data;
+    node->key = indexToAdd;
+
+    if(isEmpty()){
+        //Add data to first element of array
+        addToIndex(indexToAdd,node);
+    }else{
+        Node* root = datas[1];
+        insert(root, node, root->key);
     }
-    return -1;
+
 }
 
-int ArrayBST::get_right_child(int index) const
-{
-    if(element[index]!=0 && (2*index+1)<=MAX_SIZE){
-        return 2*index+1;
+bool BinaryTree::isEmpty(){
+    return (this->datas[1] == NULL);
+}
+
+void BinaryTree::insert(Node* root, Node* node, int key){
+    if(root == NULL){
+        node->key = key;
+        datas[key] = node;
+    }else if(root->data > node->data){
+        //add to left
+        int leftKey = getLeftChildIndex(root->key);
+        Node* left = datas[leftKey];
+        insert(left,node,leftKey);
+    }else{
+        //add to right
+        int rightKey = getRightChildIndex(root->key);
+        Node* right = datas[rightKey];
+        insert(right,node,rightKey);
     }
-    return -1;
 }
 
-void ArrayBST::preorderTraversal(int index) const{
-	if(index>0 && element[index]!=0)
-    {
-        std::cout<<element[index]<<std::endl;
-        preorderTraversal(get_left_child(index));
-        preorderTraversal(get_right_child(index));
+//Public
+void BinaryTree::preorderTraversal(){
+    std::cout<<"****\n";
+    if(isEmpty()) throw "Tree is empty";
+    Node* root = datas[1];
+    traverseVLR(root);
+    std::cout<<"\n****\n";
+} 
+
+//VLR
+void BinaryTree::traverseVLR(Node* root){
+    if(root != NULL){
+        std::cout << root->data <<" ";
+
+        Node* left = datas[getLeftChildIndex(root->key)];
+        traverseVLR(left);
+
+        Node* right = datas[getRightChildIndex(root->key)];
+        traverseVLR(right);
+    } 
+}
+
+
+void BinaryTree::addToIndex(int indexToAdd,Node* node){
+    datas[indexToAdd] = node;
+}
+
+int BinaryTree::getRightChildIndex(int key){
+    return 2*key+1;
+}
+
+int BinaryTree::getLeftChildIndex(int key){
+    return 2*key;
+}
+
+
+// Search 
+bool BinaryTree::search(int data){
+    if(isEmpty()) return false;
+    Node* root = datas[1];
+    return findInNode(root, data);
+}
+
+bool BinaryTree::findInNode(Node* root, int data){
+    if(root == NULL)return false;
+    if(root->data == data)return true;
+    if(root->data > data){
+        Node* left = datas[getLeftChildIndex(root->key)];
+        return findInNode(left,data);
+    }else{
+        Node* right = datas[getRightChildIndex(root->key)];
+        return findInNode(right,data);
     }
-}
-
-
-void ArrayBST::add(int data)
-{
-	if(this->element[0]==0){
-		element[1]=data;
-	}
-	else{
-		for(int i=1;i<=MAX_SIZE; ){
-			if(data<this->element[i]){
-				i=2*i;
-			}
-			else{
-				i=2*i+1;
-			}
-			if(this->element[i]==0){
-				this->element[i]=data;
-				break;
-			}
-		}
-	}
-	this->element[0]=this->element[0]+1;
-}
-
-bool ArrayBST::search(int data) const
-{
-	int current_index=1;
-	while(current_index<=MAX_SIZE){
-	    if(element[current_index]==data){
-	        return true;
-	        break;
-	    }
-	    else if(element[current_index]>data){
-	        current_index=2*current_index;
-	    }
-	    else if(element[current_index]<data){
-	        current_index=2*current_index+1;
-	    }
-	}
-	return false;
-}
-
-
-int main(){
-	ArrayBST tree;
-	tree.add(11);
-	tree.add(12);
-	tree.add(13);
-	tree.add(14);
-	tree.search(15);
-	tree.preorderTraversal(15);
-	return 0;
 }
