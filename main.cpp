@@ -20,4 +20,7 @@ int main(){
     std::cout << (arrayTree.search(5)) << std::endl;
     std::cout << "Searching for 12: ";
     std::cout << (arrayTree.search(13)) <<std::endl;
+
+    std::cout<<"Max element is: " << arrayTree.max() << std::endl;
+    std::cout<<"Min element is " << arrayTree.min() << std::endl;
 }

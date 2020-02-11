@@ -30,4 +30,7 @@ class BinaryTree:public BinarySearchTree{
 	int getLeftChildIndex(int );
 	bool findInNode(Node* , int );
 	int findRootInNode(Node* ,int);
+	int getMax(Node*);
+    	int getMin(Node*);
+
 };

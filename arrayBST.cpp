@@ -96,3 +96,43 @@ bool BinaryTree::findInNode(Node* root, int data){
         return findInNode(right,data);
     }
 }
+
+int BinaryTree::max(){
+    if(isEmpty()){
+        std::cout << "The tree is empty" << std::endl;
+        return -1;
+    }else{
+        Node* root = datas[1];
+        return getMax(root);
+    }
+}
+
+int BinaryTree::getMax(Node* node){
+
+    Node* right = datas[getRightChildIndex(node->key)];
+    if(right == NULL){
+        return node->data;
+    }else{
+        return getMax(right);
+    }
+
+}
+
+int BinaryTree::min(){
+    if(isEmpty()){
+        std::cout << "The tree is empty" << std::endl;
+        return -1;
+    }else{
+        Node* root = datas[1];
+        return getMin(root);
+    }
+}
+
+int BinaryTree::getMin(Node* node){
+    Node* left = datas[getLeftChildIndex(node->key)];
+    if(left == NULL){
+        return node->data;
+    }else{
+        return getMax(left);
+    }   
+}
